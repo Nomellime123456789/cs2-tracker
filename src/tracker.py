@@ -54,6 +54,9 @@ def add_match():
     assists = get_int("Помощи: ")
     adr = get_int("Средний урон за раунд (ADR): ", 0, 500)
 
+    if deaths == 0:
+        print("  ⚠️  Смертей 0 — K/D будет считаться как максимальный")
+
     with open(MATCHES_FILE, "a", newline="") as f:
         writer = csv.writer(f)
         writer.writerow([date.today(), match_map, result, kills, deaths, assists, adr])
