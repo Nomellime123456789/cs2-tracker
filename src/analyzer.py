@@ -4,7 +4,7 @@ from src.tracker import MATCHES_FILE
 def load_matches():
     matches = []
     try:
-        with open(MATCHES_FILE, "r") as f:
+        with open(MATCHES_FILE, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 matches.append({

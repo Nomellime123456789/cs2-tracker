@@ -10,8 +10,8 @@ MAPS = [
 ]
 
 def init_csv():
-    if not os.path.exists(MATCHES_FILE):
-        with open(MATCHES_FILE, "w", newline="") as f:
+    if not os.path.exists(MATCHES_FILE) or os.path.getsize(MATCHES_FILE) == 0:
+        with open(MATCHES_FILE, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(["date", "map", "result", "kills", "deaths", "assists", "adr"])
 
