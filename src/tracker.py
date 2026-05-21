@@ -6,7 +6,7 @@ MATCHES_FILE = "data/matches.csv"
 
 MAPS = [
     "Mirage", "Dust2", "Inferno", "Nuke",
-    "Ancient", "Anubis", "Vertigo", "Overpass", "Cache", "Office", "Italy"
+    "Ancient", "Anubis", "Vertigo"
 ]
 
 def init_csv():
@@ -57,8 +57,48 @@ def add_match():
     if deaths == 0:
         print("  ⚠️  Смертей 0 — K/D будет считаться как максимальный")
 
-    with open(MATCHES_FILE, "a", newline="") as f:
+    with open(MATCHES_FILE, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([date.today(), match_map, result, kills, deaths, assists, adr])
 
     print("\n✅ Матч успешно добавлен!")
+
+def show_matches():
+    matches = []
+    with open(MATCHES_FILE, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            matches.append(row)
+
+    if not matches:
+        print("❌ Нет сохранённых матчей")
+        return matches
+
+    print("\n=== Список матчей ===")
+    for i, m in enumerate(matches, 1):
+        print(f"{i}. {m['date']} | {m['map']} | {m['result']} | "
+              f"K/D: {m['kills']}/{m['deaths']}/{m['assists']} | ADR: {m['adr']}")
+    return matches
+
+def delete_match():
+    matches = show_matches()
+    if not matches:
+        return
+
+    while True:
+        try:
+            choice = int(input("\nВведи номер матча для удаления (0 — отмена): "))
+            if choice == 0:
+                print("Отмена удаления")
+                return
+            if 1 <= choice <= len(matches):
+                removed = matches.pop(choice - 1)
+                with open(MATCHES_FILE, "w", newline="", encoding="utf-8") as f:
+                    writer = csv.DictWriter(f, fieldnames=["date", "map", "result", "kills", "deaths", "assists", "adr"])
+                    writer.writeheader()
+                    writer.writerows(matches)
+                print(f"\n✅ Матч удалён: {removed['date']} | {removed['map']} | {removed['result']}")
+                return
+            print(f"  Введи число от 1 до {len(matches)}")
+        except ValueError:
+            print("  Ошибка: введи целое число")
