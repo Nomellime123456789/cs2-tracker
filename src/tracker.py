@@ -6,7 +6,7 @@ MATCHES_FILE = "data/matches.csv"
 
 MAPS = [
     "Mirage", "Dust2", "Inferno", "Nuke",
-    "Ancient", "Anubis", "Vertigo"
+    "Ancient", "Anubis", "Vertigo", "Overpass", "Cache", "Office", "Italy"
 ]
 
 def init_csv():
@@ -29,26 +29,42 @@ def get_map():
     print("\nДоступные карты:")
     for i, m in enumerate(MAPS, 1):
         print(f"  {i}. {m}")
+    print("  0. Назад")
     while True:
         try:
             choice = int(input("Выбери карту (номер): "))
+            if choice == 0:
+                return None
             if 1 <= choice <= len(MAPS):
                 return MAPS[choice - 1]
-            print(f"  Введи число от 1 до {len(MAPS)}")
+            print(f"  Введи число от 0 до {len(MAPS)}")
         except ValueError:
             print("  Ошибка: введи номер карты")
 
+
 def get_result():
     while True:
-        result = input("Результат (win/loss): ").strip().lower()
-        if result in ["win", "loss"]:
-            return result
-        print("  Введи win или loss")
-
+        result = input("Результат (1 - победа, 2 - поражение, 0 - назад): ").strip()
+        if result == "1":
+            return "win"
+        elif result == "2":
+            return "loss"
+        elif result == "0":
+            return None
+        print("  Введи 1, 2 или 0")
+        
 def add_match():
     print("\n=== Добавить матч ===")
     match_map = get_map()
+    if match_map is None:
+        print("Отмена добавления матча")
+        return
+
     result = get_result()
+    if result is None:
+        print("Отмена добавления матча")
+        return
+
     kills = get_int("Убийства: ")
     deaths = get_int("Смерти: ")
     assists = get_int("Помощи: ")

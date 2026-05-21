@@ -52,6 +52,7 @@ def show_charts():
     print("\n=== 📈 Графики ===")
     print("1. K/D по матчам")
     print("2. Винрейт по картам")
+    print("0. Назад")
 
     choice = input("\nВыбери график: ").strip()
 
@@ -59,5 +60,7 @@ def show_charts():
         chart_kd_over_time(matches)
     elif choice == "2":
         chart_winrate_by_map(matches)
+    elif choice == "0":
+        return
     else:
         print("Неверный ввод")
